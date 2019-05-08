@@ -140,7 +140,9 @@ func (hook *Hook) Blacklist(b []string) {
 func (hook *Hook) fire() {
 	for {
 		entry := <-hook.buf // receive new entry on channel
+		hook.mu.RLock()
 		hook.sendEntry(entry)
+		hook.mu.RUnlock()
 		hook.wg.Done()
 	}
 }
